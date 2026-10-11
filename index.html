@@ -1,1 +1,402 @@
-test
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Внутрішній довідник оператора Укрпошти</title>
+    <!-- Підключення скрипта діаграм Mermaid з надійного CDN -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #ffcc00;
+            --dark-color: #212529;
+            --light-bg: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --transition: all 0.25s ease-in-out;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Helvetica, Arial, sans-serif;
+            background-color: #f1f3f5;
+            color: var(--dark-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            color: #1a1a1a;
+        }
+
+        header p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        /* Екран 1: Сітка категорій */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .complaint-card {
+            background: var(--light-bg);
+            border: 1px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .complaint-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.08);
+            border-color: var(--primary-color);
+            background: #fffdf5;
+        }
+
+        .complaint-card .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .complaint-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            color: #2b303a;
+        }
+
+        .complaint-card p {
+            margin: 0;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        /* Екран 2: Деталі скарги / процесу */
+        .detail-view {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .detail-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        /* Стилі для контейнера діаграми */
+        .diagram-box {
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* Рекомендації та регламент для оператора */
+        .staff-hacks {
+            background-color: #e7f5ff;
+            border: 1px solid #d0ebff;
+            color: #1864ab;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+
+        .staff-hacks h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .staff-hacks ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 14px;
+        }
+
+        .staff-hacks li {
+            margin-bottom: 6px;
+        }
+
+        /* Кнопка повернення */
+        .btn-reset {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            background-color: var(--dark-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn-reset:hover {
+            background-color: #495057;
+            transform: scale(1.02);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Внутрішній довідник оператора Укрпошти</h1>
+        <p>Алгоритми швидкого реагування на скарги та вирішення стандартних позаштатних ситуацій у відділенні</p>
+    </header>
+
+    <!-- ЕКРАН 1: СІТКА КАТЕГОРІЙ -->
+    <div id="gridScreen" class="grid-container">
+        
+        <div class="complaint-card" onclick="showComplaint('financial')">
+            <div class="icon">💰</div>
+            <h3>Фінансові операції</h3>
+            <p>Затримка післяплати, перекази, виплата пенсій, помилки каси</p>
+        </div>
+
+        <div class="complaint-card" onclick="showComplaint('logistics')">
+            <div class="icon">📦</div>
+            <h3>Логістика та відправлення</h3>
+            <p>Пошук, пошкодження, порушення термінів, акт ф.51</p>
+        </div>
+
+        <div class="complaint-card" onclick="showComplaint('service')">
+            <div class="icon">🧑‍💼</div>
+            <h3>Робота з клієнтами</h3>
+            <p>Конфліктні ситуації, черги, робота POS-термінала та графік</p>
+        </div>
+
+        <div class="complaint-card" onclick="showComplaint('press')">
+            <div class="icon">📰</div>
+            <h3>Передплата та преса</h3>
+            <p>Звірка відомостей, розбіжності доставки періодики</p>
+        </div>
+
+        <div class="complaint-card" onclick="showComplaint('corruption')">
+            <div class="icon">🚫</div>
+            <h3>Комплаєнс та безпека</h3>
+            <p>Внутрішні інциденти, скарги на тарифи та стандарти</p>
+        </div>
+
+    </div>
+
+    <!-- ЕКРАН 2: ВІЗУАЛЬНЕ ПОЯСНЕННЯ (ХОВАНЕ ЗА ЗАМОВЧУВАННЯМ) -->
+    <div id="detailScreen" class="detail-view">
+        <div class="detail-header">
+            <span id="detailIcon" style="font-size: 32px;"></span>
+            <h2 id="detailTitle">Назва процедури</h2>
+        </div>
+
+        <!-- Контейнер для рендерингу діаграми Mermaid (клас 'mermaid' обов'язковий) -->
+        <div class="diagram-box">
+            <div id="mermaidTarget" class="mermaid"></div>
+        </div>
+
+        <!-- Рекомендації та регламент для оператора -->
+        <div class="staff-hacks">
+            <h4>🛡️ Професійний регламент та алгоритмічні поради для оператора</h4>
+            <ul id="hacksList">
+                <!-- Заповнюється динамічно за допомогою JS -->
+            </ul>
+        </div>
+
+        <!-- Кнопка скидання -->
+        <button class="btn-reset" onclick="resetToHome()">До головного меню</button>
+    </div>
+</div>
+
+<script>
+    // Ініціалізація Mermaid конфігурації
+    mermaid.initialize({ 
+        startOnLoad: false, 
+        theme: 'neutral',
+        securityLevel: 'loose',
+        themeVariables: {
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Helvetica, Arial, sans-serif'
+        }
+    });
+
+    // Опис даних, схем Mermaid та професійних порад для оператора
+    const complaintData = {
+        financial: {
+            title: "Фінансові операції: алгоритм вирішення претензій",
+            icon: "💰",
+            hacks: [
+                "Перевіряйте статус грошового переказу в АРМ «Відділення» комплексно: як за номером телефону клієнта, так і за унікальним кодом та ПІБ отримувача.",
+                "При суперечках щодо термінів зберігання відкривайте системний календар АСКУ: нагадуйте клієнту про офіційні вихідні чи святкові дні відділення, які не входять до терміну зберігання.",
+                "Якщо у програмі виникла помилка зависання переказу, використовуйте штатний функціонал «Анулювання/Повернення» через меню транзакцій або зверніться до техпідтримки за внутрішнім регламентом."
+            ],
+            graph: `graph TD
+                A[🧑‍💼 Звернення клієнта щодо виплати / післяплати 💸] --> B{🖥️ Чи є кошти в системі АСКУ? 💰}
+                B -- Так ✅ --> C[🆔 Ідентифікація за паспортом 📇 + верифікація даних 🔐]
+                C --> D[💵 Виплата коштів 💳 + видача чека 🧾 + подяка 🙏]
+                B -- Ні / Збій ❌ --> E[🔎 Перевірити історію транзакцій 📜 за трек-номером 🧾]
+                E --> F{⏳ Переказ «завис» 🧯 чи ще в дорозі 🚚?}
+                F -- «Завис» 🧯 --> G[🛠️ Внутрішній запит у техпідтримку 🧑‍💻 + розшук 🔔]
+                F -- У дорозі 🚚 --> H[ℹ️ Офіційні роз'яснення термінів 📅 + контакт для відстеження 📞]`
+        },
+        logistics: {
+            title: "Логістика та робота з пошкодженими/втраченими відправленнями",
+            icon: "📦",
+            hacks: [
+                "Якщо посилку пошкоджено або втрачено, чітко дотримуйтесь інструкції зі складання Акта за формою 51 із залученням начальника відділення.",
+                "У разі збою сканування штрих-коду виконуйте ручне введення цифр трек-номера в АРМ та перевіряйте фізичну наявність на складі за останками логістичної мітки.",
+                "Консультуйте клієнта про стандартні терміни подачі офіційної рекламації (до 6 місяців) та не беріть на себе особисту відповідальність за затримки магістральної логістики."
+            ],
+            graph: `graph TD
+                A[📦 Скарга: пошкодження / втрата ❗] --> B{👀 Огляд під час отримання був?}
+                B -- Так, складено акт ✅ --> C[📝 Акт ф.51 📄 + фотофіксація 📸 + пакет документів 📂]
+                B -- Ні, вже винесено 🚪 --> D[📘 Пояснити обмеження правил ⚠️ + варіанти звернення 📨]
+                C --> E[💻 Реєстрація в системі 🗄️ + копія акта клієнту 🧾]
+                D --> F[🌐 Рекомендація: звернення через сайт 💼 + трекінг 🔍]`
+        },
+        service: {
+            title: "Обслуговування клієнтів та робота з обладнанням",
+            icon: "🧑‍💼",
+            hacks: [
+                "У разі конфліктних ситуацій або перевантаження черги тримайтеся регламенту компанії, за потреби залучайте керівника відділення для перерозподілу потоків.",
+                "При технічних збоях POS-термінала виконуйте стандартне перезавантаження пристрою перед тим, як повідомляти про неможливість безготівкової оплати.",
+                "Усі технічні інциденти та збої зв'язку фіксуйте у внутрішньому чаті/системі заявок ІТ-підтримки для захисту інтересів зміни."
+            ],
+            graph: `graph TD
+                A[⚠️ Інцидент у залі: конфлікт 😠 або збій обладнання 🛠️] --> B{🧭 Визначити характер проблеми}
+                B -- Технічний збій 💳🌐 --> C[🔌 Перезавантаження 🔁 + 📞 ІТ-підтримка 👨‍💻 + логування 📝]
+                B -- Конфлікт / черга ⏱️ --> D[👩‍✈️ Керівник у допомогу 🤝 + 🪟 додаткове вікно + комунікація 🗣️]
+                C --> E[🟢 Робота відновлена ✅ + інформування клієнтів 📣]
+                D --> E[😊 Стабілізація сервісу 🧘 + пріоритезація черги 🧾]`
+        },
+        press: {
+            title: "Супровід передплати та доставки періодичних видань",
+            icon: "📰",
+            hacks: [
+                "При розбіжностях у доставці газет перевіряйте паперову Книгу обліку надходження періодики та актуальну картотеку адрес доставної дільниці.",
+                "Звіряйте квитанцію клієнта з внутрішньою відомістю передплати, щоб оперативно виявити технічну помилку сортування чи адресації.",
+                "У разі системної недоставки від видавництва допомагайте клієнту сформувати письмову претензію безпосередньо на адресу редакції."
+            ],
+            graph: `graph TD
+                A[📰 Скарга на недоставку преси 🚫] --> B[🧾 Перевірити квитанцію передплати 🔍]
+                B --> C[📚 Звірити з Книгою обліку періодики 📖 та картотекою 🗂️]
+                C --> D{📍 Де затримка? 🧩}
+                D -- Розподіл дільниці 🔁 --> E[🗺️ Виправити маршрутизацію 🧭 + видати номер із запасу 📦]
+                D -- Видавництво 🏭 --> F[✍️ Довідка-претензія 📨 + контакт з редакцією 📬]`
+        },
+        corruption: {
+            title: "Комплаєнс, тарифи та внутрішні стандарти безпеки",
+            icon: "🚫",
+            hacks: [
+                "Працюйте виключно за чинними затвердженими тарифами Укрпошти, уникаючи будь-яких неформальних розрахунків чи послуг «навколо каси».",
+                "Усі додаткові послуги (пакування, фірмові коробки, маркетинг) проводьте через програмний реєстратор розрахункових операцій з видачею фіскального чека.",
+                "При виникненні підозрілих або корупційних інцидентів негайно повідомляйте Департамент безпеки згідно з внутрішнім регламентом комплаєнсу."
+            ],
+            graph: `graph TD
+                A[🚨 Комплаєнс-ризик / інцидент 🕵️] --> B[🧮 Фіксація параметрів операції 💾 у програмі 🖥️]
+                B --> C[🔍 Перевірка регламентів 📑 і тарифів 💲 + доказова база 📸]
+                C --> D{⚖️ Є порушення / зловживання? 🤔}
+                D -- Так ✅ --> E[📢 Повідомити керівництво 🧑‍✈️ та Службу безпеки 🛡️ + реєстрація інциденту 🗃️]
+                D -- Ні ❌ --> F[ℹ️ Офіційне роз'яснення клієнту 🧩 за шаблоном 📨 + посилання на правила 🔗]`
+        }
+    };
+
+    // Функція відображення екрану з деталями
+    async function showComplaint(type) {
+        const data = complaintData[type];
+        
+        // Заповнення текстових полів
+        document.getElementById('detailIcon').innerText = data.icon;
+        document.getElementById('detailTitle').innerText = data.title;
+        
+        // Заповнення професійних рекомендацій
+        const hacksContainer = document.getElementById('hacksList');
+        hacksContainer.innerHTML = '';
+        data.hacks.forEach(hack => {
+            const li = document.createElement('li');
+            li.innerText = hack;
+            hacksContainer.appendChild(li);
+        });
+
+        // Підготовка цільового контейнера для Mermaid
+        const target = document.getElementById('mermaidTarget');
+        target.removeAttribute('data-processed'); // Очищаємо попередній статус обробки
+        target.textContent = data.graph;          // Вставляємо чистий код графа
+
+        // Перемикання екранів
+        document.getElementById('gridScreen').style.display = 'none';
+        document.getElementById('detailScreen').style.display = 'block';
+
+        // Викликаємо сучасний рендеринг через mermaid.run()
+        try {
+            await mermaid.run({
+                nodes: [target]
+            });
+        } catch (error) {
+            console.error("Помилка рендерингу Mermaid:", error);
+        }
+    }
+
+    // Функція повернення на головну сторінку (до головного меню)
+    function resetToHome() {
+        document.getElementById('detailScreen').style.display = 'none';
+        document.getElementById('gridScreen').style.display = 'grid';
+    }
+</script>
+
+</body>
+</html>

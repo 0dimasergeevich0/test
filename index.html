@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Внутрішній довідник оператора Укрпошти</title>
-    <!-- Підключення скрипта діаграм Mermaid з надійного CDN -->
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <style>
         :root {
@@ -53,7 +52,6 @@
             font-size: 16px;
         }
 
-        /* Екран 1: Сітка категорій */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -99,7 +97,6 @@
             color: #6c757d;
         }
 
-        /* Екран 2: Деталі скарги / процесу */
         .detail-view {
             display: none;
             animation: fadeIn 0.4s ease;
@@ -121,7 +118,6 @@
             font-size: 22px;
         }
 
-        /* Стилі для контейнера діаграми */
         .diagram-box {
             background: #ffffff;
             border: 1px solid #e9ecef;
@@ -132,7 +128,6 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* Рекомендації та регламент для оператора */
         .staff-hacks {
             background-color: #e7f5ff;
             border: 1px solid #d0ebff;
@@ -160,7 +155,6 @@
             margin-bottom: 6px;
         }
 
-        /* Кнопка повернення */
         .btn-reset {
             display: block;
             width: 100%;
@@ -193,6 +187,134 @@
             .container { padding: 15px; }
             h1 { font-size: 22px; }
         }
+
+        /* Форма покращення алгоритму */
+        .form-section {
+            background: #fffef8;
+            border: 1px solid #ffe8a1;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .form-grid-1 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .form-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-control label {
+            font-size: 14px;
+            color: #343a40;
+            font-weight: 600;
+        }
+
+        .form-control input[type="text"],
+        .form-control input[type="number"],
+        .form-control input[type="email"],
+        .form-control input[type="tel"],
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+            background: #fff;
+        }
+
+        .form-control textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-control input:focus,
+        .form-control select:focus,
+        .form-control textarea:focus {
+            border-color: #ffcc00;
+            box-shadow: 0 0 0 3px rgba(255,204,0,0.2);
+        }
+
+        .inline-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            align-items: center;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f1f3f5;
+            color: #495057;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid #dee2e6;
+            font-size: 12px;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            border: none;
+            color: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn:hover { filter: brightness(0.95); transform: translateY(-1px); }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #1a1a1a;
+        }
+
+        .success-box {
+            border: 1px solid #d3f9d8;
+            background: #ebfbee;
+            color: #2b8a3e;
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .error-text {
+            color: #d6336c;
+            font-size: 13px;
+            display: none;
+        }
+
+        .preview {
+            background: #f8f9fa;
+            border: 1px dashed #ced4da;
+            border-radius: 10px;
+            padding: 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+
+        .muted {
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+        @media (max-width: 720px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -203,9 +325,7 @@
         <p>Алгоритми швидкого реагування на скарги та вирішення стандартних позаштатних ситуацій у відділенні</p>
     </header>
 
-    <!-- ЕКРАН 1: СІТКА КАТЕГОРІЙ -->
     <div id="gridScreen" class="grid-container">
-        
         <div class="complaint-card" onclick="showComplaint('financial')">
             <div class="icon">💰</div>
             <h3>Фінансові операції</h3>
@@ -236,35 +356,125 @@
             <p>Внутрішні інциденти, скарги на тарифи та стандарти</p>
         </div>
 
+        <div class="complaint-card" onclick="showComplaint('improvement')">
+            <div class="icon">🤖</div>
+            <h3>Покращення алгоритмів</h3>
+            <p>Заявки на зміни сповіщень, статусів у застосунку/чатботі тощо</p>
+        </div>
     </div>
 
-    <!-- ЕКРАН 2: ВІЗУАЛЬНЕ ПОЯСНЕННЯ (ХОВАНЕ ЗА ЗАМОВЧУВАННЯМ) -->
     <div id="detailScreen" class="detail-view">
         <div class="detail-header">
             <span id="detailIcon" style="font-size: 32px;"></span>
             <h2 id="detailTitle">Назва процедури</h2>
         </div>
 
-        <!-- Контейнер для рендерингу діаграми Mermaid (клас 'mermaid' обов'язковий) -->
+        <!-- Форма заявки на покращення алгоритму -->
+        <div id="improvementFormSection" class="form-section" style="display:none;">
+            <div class="form-grid">
+                <div class="form-control">
+                    <label for="improveType">Тип покращення</label>
+                    <select id="improveType" required>
+                        <option value="" disabled selected>Оберіть зі списку...</option>
+                        <option value="smsExpensive">Надсилання SMS для дорогих товарів</option>
+                        <option value="extraDelay">Додаткове сповіщення про затримку посилки</option>
+                        <option value="wrongStatus">Некоректне відображення статусу в застосунку/чатботі</option>
+                        <option value="dupOrMissing">Дубльовані або відсутні повідомлення</option>
+                        <option value="routingPriority">Невірна маршрутизація/пріоритезація</option>
+                        <option value="other">Інше</option>
+                    </select>
+                    <span id="typeError" class="error-text">Оберіть тип покращення.</span>
+                </div>
+
+                <div class="form-control">
+                    <label for="severity">Важливість</label>
+                    <select id="severity">
+                        <option value="low">Низька</option>
+                        <option value="medium" selected>Середня</option>
+                        <option value="high">Висока</option>
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <label for="track">Трек-номер (за наявності)</label>
+                    <input id="track" type="text" placeholder="UA12345678901234567890">
+                </div>
+
+                <div class="form-control">
+                    <label>Канали, яких стосується</label>
+                    <div class="inline-options">
+                        <label><input type="checkbox" name="channels" value="SMS"> SMS</label>
+                        <label><input type="checkbox" name="channels" value="Push"> Push</label>
+                        <label><input type="checkbox" name="channels" value="Email"> Email</label>
+                        <label><input type="checkbox" name="channels" value="App"> Застосунок</label>
+                        <label><input type="checkbox" name="channels" value="Chatbot"> Чатбот</label>
+                        <label><input type="checkbox" name="channels" value="Web"> Веб-трекінг</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dynamicFields" class="form-grid" style="margin-top: 6px;"></div>
+
+            <div class="form-grid-1" style="margin-top: 6px;">
+                <div class="form-control">
+                    <label for="problemDesc">Опис проблеми</label>
+                    <textarea id="problemDesc" placeholder="Коротко: що саме відбувається, кроки відтворення, час/дата, приклади..."></textarea>
+                    <span id="descError" class="error-text">Опишіть проблему (мінімум 10 символів).</span>
+                </div>
+
+                <div class="form-control">
+                    <label for="proposal">Пропоноване рішення (за бажанням)</label>
+                    <textarea id="proposal" placeholder="Як саме має працювати алгоритм/правило. Приклади повідомлень, умови тригерів..."></textarea>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-control">
+                        <label for="contact">Контакт для зворотного зв'язку</label>
+                        <input id="contact" type="text" placeholder="Телефон або email">
+                        <span id="contactError" class="error-text">Вкажіть контакт для зворотного зв’язку.</span>
+                    </div>
+                    <div class="form-control">
+                        <label for="files">Додати скріншоти/файли (необов'язково)</label>
+                        <input id="files" type="file" accept="image/*,.pdf,.txt" multiple>
+                        <span class="muted">Файли не завантажуються на сервер, лишаються локально.</span>
+                    </div>
+                </div>
+
+                <div class="inline-options" style="margin-top: 6px;">
+                    <button class="btn" id="buildPreviewBtn" type="button">Сформувати заявку</button>
+                    <button class="btn btn-secondary" id="clearFormBtn" type="button">Очистити форму</button>
+                    <button class="btn btn-secondary" id="loadDraftBtn" type="button">Завантажити останній чернетку</button>
+                </div>
+
+                <div id="previewBlock" style="display:none;">
+                    <div class="form-control" style="margin-top: 10px;">
+                        <label>Попередній перегляд заявки</label>
+                        <div id="preview" class="preview"></div>
+                        <div class="inline-options" style="margin-top: 8px;">
+                            <button class="btn" id="copyBtn" type="button">Копіювати</button>
+                            <button class="btn" id="saveLocalBtn" type="button">Зберегти як чернетку</button>
+                            <button class="btn" id="submitBtn" type="button">Надіслати (локальна імітація)</button>
+                        </div>
+                        <div id="successMsg" class="success-box">Заявку збережено локально з ID: <span id="ticketId"></span>. Ви можете вставити текст у систему заявок.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="diagram-box">
             <div id="mermaidTarget" class="mermaid"></div>
         </div>
 
-        <!-- Рекомендації та регламент для оператора -->
         <div class="staff-hacks">
             <h4>🛡️ Професійний регламент та алгоритмічні поради для оператора</h4>
-            <ul id="hacksList">
-                <!-- Заповнюється динамічно за допомогою JS -->
-            </ul>
+            <ul id="hacksList"></ul>
         </div>
 
-        <!-- Кнопка скидання -->
         <button class="btn-reset" onclick="resetToHome()">До головного меню</button>
     </div>
 </div>
 
 <script>
-    // Ініціалізація Mermaid конфігурації
     mermaid.initialize({ 
         startOnLoad: false, 
         theme: 'neutral',
@@ -274,7 +484,6 @@
         }
     });
 
-    // Опис даних, схем Mermaid та професійних порад для оператора
     const complaintData = {
         financial: {
             title: "Фінансові операції: алгоритм вирішення претензій",
@@ -352,50 +561,411 @@
                 C --> D{⚖️ Є порушення / зловживання? 🤔}
                 D -- Так ✅ --> E[📢 Повідомити керівництво 🧑‍✈️ та Службу безпеки 🛡️ + реєстрація інциденту 🗃️]
                 D -- Ні ❌ --> F[ℹ️ Офіційне роз'яснення клієнту 🧩 за шаблоном 📨 + посилання на правила 🔗]`
+        },
+        improvement: {
+            title: "Заявка на покращення алгоритмів сповіщень та статусів",
+            icon: "🤖",
+            hacks: [
+                "Надавайте конкретні приклади: трек-номер, час події, скріншоти з відображенням проблеми.",
+                "Опишіть очікувану логіку: умови тригерів, пріоритет, тексти сповіщень.",
+                "Позначте важливість: це допоможе швидше пріоритизувати зміни у беклозі."
+            ],
+            hasForm: true,
+            graph: `graph TD
+                A[🤖 Ініціація заявки на покращення] --> B[📝 Заповнення форми: тип, опис, приклади]
+                B --> C{✅ Валідація даних}
+                C -- Ок --> D[💾 Збереження / створення тікета]
+                C -- Ні --> E[✏️ Уточнення полів]
+                D --> F[📣 Комунікація з ініціатором]`
         }
     };
 
-    // Функція відображення екрану з деталями
     async function showComplaint(type) {
         const data = complaintData[type];
-        
-        // Заповнення текстових полів
         document.getElementById('detailIcon').innerText = data.icon;
         document.getElementById('detailTitle').innerText = data.title;
-        
-        // Заповнення професійних рекомендацій
+
         const hacksContainer = document.getElementById('hacksList');
         hacksContainer.innerHTML = '';
-        data.hacks.forEach(hack => {
+        (data.hacks || []).forEach(hack => {
             const li = document.createElement('li');
             li.innerText = hack;
             hacksContainer.appendChild(li);
         });
 
-        // Підготовка цільового контейнера для Mermaid
         const target = document.getElementById('mermaidTarget');
-        target.removeAttribute('data-processed'); // Очищаємо попередній статус обробки
-        target.textContent = data.graph;          // Вставляємо чистий код графа
+        target.removeAttribute('data-processed');
+        target.textContent = data.graph || '';
 
-        // Перемикання екранів
+        // Перемикання секцій для форми покращення
+        const formSec = document.getElementById('improvementFormSection');
+        const diagramBox = document.querySelector('.diagram-box');
+        const staffHacks = document.querySelector('.staff-hacks');
+
+        if (data.hasForm) {
+            formSec.style.display = 'block';
+            diagramBox.style.display = 'none';
+            staffHacks.style.display = 'block';
+            resetImprovementFormUI();
+        } else {
+            formSec.style.display = 'none';
+            diagramBox.style.display = 'block';
+            staffHacks.style.display = 'block';
+            try {
+                await mermaid.run({ nodes: [target] });
+            } catch (error) {
+                console.error("Помилка рендерингу Mermaid:", error);
+            }
+        }
+
         document.getElementById('gridScreen').style.display = 'none';
         document.getElementById('detailScreen').style.display = 'block';
-
-        // Викликаємо сучасний рендеринг через mermaid.run()
-        try {
-            await mermaid.run({
-                nodes: [target]
-            });
-        } catch (error) {
-            console.error("Помилка рендерингу Mermaid:", error);
-        }
     }
 
-    // Функція повернення на головну сторінку (до головного меню)
     function resetToHome() {
         document.getElementById('detailScreen').style.display = 'none';
         document.getElementById('gridScreen').style.display = 'grid';
     }
+
+    // ---------- ЛОГІКА ФОРМИ ПОКРАЩЕННЯ ----------
+    const dynamicFieldsMap = {
+        smsExpensive: (root) => {
+            root.innerHTML = `
+                <div class="form-control">
+                    <label for="priceThreshold">Порогова вартість (грн)</label>
+                    <input id="priceThreshold" type="number" min="0" step="1" placeholder="Напр., 5000">
+                </div>
+                <div class="form-control">
+                    <label>Тип сповіщення</label>
+                    <div class="inline-options">
+                        <label><input type="checkbox" value="SMS" checked> SMS</label>
+                        <label><input type="checkbox" value="Viber"> Viber</label>
+                        <label><input type="checkbox" value="Push"> Push</label>
+                    </div>
+                </div>
+            `;
+        },
+        extraDelay: (root) => {
+            root.innerHTML = `
+                <div class="form-control">
+                    <label for="delayWindow">Очікуваний діапазон затримки</label>
+                    <select id="delayWindow">
+                        <option value="24h">до 24 год</option>
+                        <option value="48h" selected>24–48 год</option>
+                        <option value="72h">48–72 год</option>
+                        <option value=">72h">понад 72 год</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="reminders">Кількість нагадувань</label>
+                    <select id="reminders">
+                        <option>1</option>
+                        <option selected>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+            `;
+        },
+        wrongStatus: (root) => {
+            root.innerHTML = `
+                <div class="form-control">
+                    <label for="currentStatus">Поточний відображений статус</label>
+                    <input id="currentStatus" type="text" placeholder="Напр., Доставлено">
+                </div>
+                <div class="form-control">
+                    <label for="expectedStatus">Очікуваний статус</label>
+                    <input id="expectedStatus" type="text" placeholder="Напр., Прибув до відділення">
+                </div>
+                <div class="form-control">
+                    <label>Платформа</label>
+                    <div class="inline-options">
+                        <label><input type="radio" name="platform" value="App" checked> Застосунок</label>
+                        <label><input type="radio" name="platform" value="Chatbot"> Чатбот</label>
+                        <label><input type="radio" name="platform" value="Web"> Веб</label>
+                    </div>
+                </div>
+            `;
+        },
+        dupOrMissing: (root) => {
+            root.innerHTML = `
+                <div class="form-control">
+                    <label>Тип проблеми</label>
+                    <div class="inline-options">
+                        <label><input type="radio" name="dupType" value="duplicates" checked> Дубльовані</label>
+                        <label><input type="radio" name="dupType" value="missing"> Відсутні</label>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <label for="affectedChannel">Канал</label>
+                    <select id="affectedChannel">
+                        <option>SMS</option>
+                        <option>Push</option>
+                        <option>Email</option>
+                        <option>Застосунок</option>
+                        <option>Чатбот</option>
+                        <option>Веб</option>
+                    </select>
+                </div>
+            `;
+        },
+        routingPriority: (root) => {
+            root.innerHTML = `
+                <div class="form-control">
+                    <label for="origin">Пункт відправлення</label>
+                    <input id="origin" type="text" placeholder="Місто/ВПЗ">
+                </div>
+                <div class="form-control">
+                    <label for="destination">Пункт призначення</label>
+                    <input id="destination" type="text" placeholder="Місто/ВПЗ">
+                </div>
+            `;
+        },
+        other: (root) => {
+            root.innerHTML = `
+                <div class="form-control">
+                    <label for="otherTitle">Коротка назва ініціативи</label>
+                    <input id="otherTitle" type="text" placeholder="Напр., Нове правило пуш-сповіщень">
+                </div>
+            `;
+        }
+    };
+
+    function resetImprovementFormUI() {
+        document.getElementById('improveType').value = '';
+        document.getElementById('severity').value = 'medium';
+        document.getElementById('track').value = '';
+        document.getElementById('problemDesc').value = '';
+        document.getElementById('proposal').value = '';
+        document.getElementById('contact').value = '';
+        document.getElementById('files').value = '';
+        Array.from(document.querySelectorAll('input[name="channels"]')).forEach(c => c.checked = false);
+        document.getElementById('dynamicFields').innerHTML = '';
+        document.getElementById('previewBlock').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'none';
+        hideErrors();
+    }
+
+    function hideErrors() {
+        document.getElementById('typeError').style.display = 'none';
+        document.getElementById('descError').style.display = 'none';
+        document.getElementById('contactError').style.display = 'none';
+    }
+
+    function generateTicketId() {
+        const arr = new Uint32Array(2);
+        crypto.getRandomValues(arr);
+        return 'ALG-' + arr[0].toString(16).toUpperCase() + '-' + arr[1].toString(16).toUpperCase();
+    }
+
+    function buildPreviewPayload() {
+        const type = document.getElementById('improveType').value;
+        const severity = document.getElementById('severity').value;
+        const track = document.getElementById('track').value.trim();
+        const desc = document.getElementById('problemDesc').value.trim();
+        const proposal = document.getElementById('proposal').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+        const channels = Array.from(document.querySelectorAll('input[name="channels"]:checked')).map(c => c.value);
+
+        hideErrors();
+        let valid = true;
+        if (!type) { document.getElementById('typeError').style.display = 'block'; valid = false; }
+        if (desc.length < 10) { document.getElementById('descError').style.display = 'block'; valid = false; }
+        if (!contact) { document.getElementById('contactError').style.display = 'block'; valid = false; }
+        if (!valid) return null;
+
+        // Динамічні поля залежно від типу
+        const dynamic = {};
+        if (type === 'smsExpensive') {
+            dynamic.priceThreshold = (document.getElementById('priceThreshold')?.value || '').trim();
+            dynamic.notifyVia = Array.from(document.querySelectorAll('#dynamicFields input[type="checkbox"]:checked')).map(x => x.value);
+        }
+        if (type === 'extraDelay') {
+            dynamic.delayWindow = document.getElementById('delayWindow')?.value || '';
+            dynamic.reminders = document.getElementById('reminders')?.value || '';
+        }
+        if (type === 'wrongStatus') {
+            dynamic.currentStatus = (document.getElementById('currentStatus')?.value || '').trim();
+            dynamic.expectedStatus = (document.getElementById('expectedStatus')?.value || '').trim();
+            dynamic.platform = (document.querySelector('input[name="platform"]:checked')?.value || '');
+        }
+        if (type === 'dupOrMissing') {
+            dynamic.issueKind = (document.querySelector('input[name="dupType"]:checked')?.value || '');
+            dynamic.affectedChannel = document.getElementById('affectedChannel')?.value || '';
+        }
+        if (type === 'routingPriority') {
+            dynamic.origin = (document.getElementById('origin')?.value || '').trim();
+            dynamic.destination = (document.getElementById('destination')?.value || '').trim();
+        }
+        if (type === 'other') {
+            dynamic.title = (document.getElementById('otherTitle')?.value || '').trim();
+        }
+
+        const filesInput = document.getElementById('files');
+        const files = filesInput && filesInput.files ? Array.from(filesInput.files).map(f => ({ name: f.name, size: f.size })) : [];
+
+        const payload = {
+            kind: "algoImprovementRequest",
+            type,
+            severity,
+            track: track || null,
+            channels,
+            description: desc,
+            proposal: proposal || null,
+            dynamic,
+            attachments: files,
+            contact,
+            timestamp: new Date().toISOString()
+        };
+        return payload;
+    }
+
+    function renderPreview(payload) {
+        const pretty = JSON.stringify(payload, null, 2);
+        const preview = document.getElementById('preview');
+        preview.textContent = pretty + "\n\nШаблон теми: [" + payload.severity.toUpperCase() + "] " + humanType(payload.type) + (payload.track ? " – " + payload.track : "");
+        document.getElementById('previewBlock').style.display = 'block';
+        document.getElementById('successMsg').style.display = 'none';
+    }
+
+    function humanType(val) {
+        return ({
+            smsExpensive: "SMS для дорогих товарів",
+            extraDelay: "Додаткове сповіщення про затримку",
+            wrongStatus: "Некоректний статус у застосунку/чатботі",
+            dupOrMissing: "Дубльовані/відсутні повідомлення",
+            routingPriority: "Невірна маршрутизація/пріоритезація",
+            other: "Інше покращення"
+        })[val] || val;
+    }
+
+    function copyPreview() {
+        const text = document.getElementById('preview').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const box = document.getElementById('successMsg');
+            box.style.display = 'block';
+            document.getElementById('ticketId').textContent = 'СКОПІЙОВАНО';
+            setTimeout(() => { box.style.display = 'none'; }, 1500);
+        }).catch(() => {});
+    }
+
+    function saveDraft(payload) {
+        try {
+            localStorage.setItem('algoImprovementDraft', JSON.stringify(payload));
+            const box = document.getElementById('successMsg');
+            document.getElementById('ticketId').textContent = 'Чернетка';
+            box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 1500);
+        } catch(e) {}
+    }
+
+    function loadDraft() {
+        try {
+            const raw = localStorage.getItem('algoImprovementDraft');
+            if (!raw) return;
+            const d = JSON.parse(raw);
+            // Відновлення основних полів
+            document.getElementById('improveType').value = d.type || '';
+            document.getElementById('severity').value = d.severity || 'medium';
+            document.getElementById('track').value = d.track || '';
+            document.getElementById('problemDesc').value = d.description || '';
+            document.getElementById('proposal').value = d.proposal || '';
+            document.getElementById('contact').value = d.contact || '';
+            // Канали
+            Array.from(document.querySelectorAll('input[name="channels"]')).forEach(c => {
+                c.checked = (d.channels || []).includes(c.value);
+            });
+            // Динамічні
+            const type = d.type || '';
+            const dynRoot = document.getElementById('dynamicFields');
+            dynRoot.innerHTML = '';
+            if (dynamicFieldsMap[type]) {
+                dynamicFieldsMap[type](dynRoot);
+                // Підставити відомі значення
+                const dv = d.dynamic || {};
+                if (type === 'smsExpensive') {
+                    const pt = document.getElementById('priceThreshold');
+                    if (pt) pt.value = dv.priceThreshold || '';
+                    // чекбокси в динаміці
+                    Array.from(dynRoot.querySelectorAll('input[type="checkbox"]')).forEach(x => {
+                        x.checked = (dv.notifyVia || []).includes(x.value);
+                    });
+                }
+                if (type === 'extraDelay') {
+                    const dw = document.getElementById('delayWindow'); if (dw) dw.value = dv.delayWindow || '48h';
+                    const rm = document.getElementById('reminders'); if (rm) rm.value = dv.reminders || '2';
+                }
+                if (type === 'wrongStatus') {
+                    const cs = document.getElementById('currentStatus'); if (cs) cs.value = dv.currentStatus || '';
+                    const es = document.getElementById('expectedStatus'); if (es) es.value = dv.expectedStatus || '';
+                    const plat = dv.platform || 'App';
+                    const r = dynRoot.querySelector('input[name="platform"][value="'+plat+'"]');
+                    if (r) r.checked = true;
+                }
+                if (type === 'dupOrMissing') {
+                    const ik = dv.issueKind || 'duplicates';
+                    const r = dynRoot.querySelector('input[name="dupType"][value="'+ik+'"]');
+                    if (r) r.checked = true;
+                    const ac = document.getElementById('affectedChannel'); if (ac) ac.value = dv.affectedChannel || 'SMS';
+                }
+                if (type === 'routingPriority') {
+                    const o = document.getElementById('origin'); if (o) o.value = dv.origin || '';
+                    const dt = document.getElementById('destination'); if (dt) dt.value = dv.destination || '';
+                }
+                if (type === 'other') {
+                    const ot = document.getElementById('otherTitle'); if (ot) ot.value = dv.title || '';
+                }
+            }
+            // Показати прев'ю
+            renderPreview(d);
+        } catch(e) {}
+    }
+
+    function submitLocally(payload) {
+        const id = generateTicketId();
+        payload.localTicketId = id;
+        try {
+            const all = JSON.parse(localStorage.getItem('algoImprovementTickets') || '[]');
+            all.push(payload);
+            localStorage.setItem('algoImprovementTickets', JSON.stringify(all));
+        } catch(e) {}
+        const box = document.getElementById('successMsg');
+        document.getElementById('ticketId').textContent = id;
+        box.style.display = 'block';
+    }
+
+    // Події форми
+    document.addEventListener('DOMContentLoaded', () => {
+        const typeSel = document.getElementById('improveType');
+        const dyn = document.getElementById('dynamicFields');
+        typeSel?.addEventListener('change', () => {
+            dyn.innerHTML = '';
+            const v = typeSel.value;
+            if (dynamicFieldsMap[v]) dynamicFieldsMap[v](dyn);
+        });
+
+        document.getElementById('buildPreviewBtn')?.addEventListener('click', () => {
+            const payload = buildPreviewPayload();
+            if (!payload) return;
+            renderPreview(payload);
+        });
+
+        document.getElementById('copyBtn')?.addEventListener('click', copyPreview);
+
+        document.getElementById('saveLocalBtn')?.addEventListener('click', () => {
+            const payload = buildPreviewPayload();
+            if (!payload) return;
+            saveDraft(payload);
+        });
+
+        document.getElementById('submitBtn')?.addEventListener('click', () => {
+            const payload = buildPreviewPayload();
+            if (!payload) return;
+            submitLocally(payload);
+        });
+
+        document.getElementById('clearFormBtn')?.addEventListener('click', resetImprovementFormUI);
+        document.getElementById('loadDraftBtn')?.addEventListener('click', loadDraft);
+    });
 </script>
 
 </body>

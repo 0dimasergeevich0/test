@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Внутрішній довідник фахівця Укрпошти</title>
-    <!-- Підключення скрипта діаграм Mermaid з надійного CDN -->
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <style>
         :root {
@@ -53,7 +52,6 @@
             font-size: 16px;
         }
 
-        /* Екран 1: Сітка категорій */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -99,7 +97,6 @@
             color: #6c757d;
         }
 
-        /* Екран 2: Деталі скарги / процесу */
         .detail-view {
             display: none;
             animation: fadeIn 0.4s ease;
@@ -121,7 +118,6 @@
             font-size: 22px;
         }
 
-        /* Стилі для контейнера діаграми */
         .diagram-box {
             background: #ffffff;
             border: 1px solid #e9ecef;
@@ -132,7 +128,6 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* Рекомендації та регламент для оператора */
         .staff-hacks {
             background-color: #e7f5ff;
             border: 1px solid #d0ebff;
@@ -160,7 +155,6 @@
             margin-bottom: 6px;
         }
 
-        /* Кнопка повернення */
         .btn-reset {
             display: block;
             width: 100%;
@@ -203,9 +197,7 @@
         <p>Алгоритми швидкого реагування на скарги та вирішення стандартних позаштатних ситуацій у відділенні</p>
     </header>
 
-    <!-- ЕКРАН 1: СІТКА КАТЕГОРІЙ -->
     <div id="gridScreen" class="grid-container">
-        
         <div class="complaint-card" onclick="showComplaint('financial')">
             <div class="icon">💰</div>
             <h3>Фінансові операції</h3>
@@ -235,36 +227,28 @@
             <h3>Комплаєнс та безпека</h3>
             <p>Внутрішні інциденти, скарги на тарифи та стандарти</p>
         </div>
-
     </div>
 
-    <!-- ЕКРАН 2: ВІЗУАЛЬНЕ ПОЯСНЕННЯ (ХОВАНЕ ЗА ЗАМОВЧУВАННЯМ) -->
     <div id="detailScreen" class="detail-view">
         <div class="detail-header">
             <span id="detailIcon" style="font-size: 32px;"></span>
             <h2 id="detailTitle">Назва процедури</h2>
         </div>
 
-        <!-- Контейнер для рендерингу діаграми Mermaid (клас 'mermaid' обов'язковий) -->
         <div class="diagram-box">
             <div id="mermaidTarget" class="mermaid"></div>
         </div>
 
-        <!-- Рекомендації та регламент для оператора -->
         <div class="staff-hacks">
             <h4>🛡️ Професійний регламент та алгоритмічні поради для оператора</h4>
-            <ul id="hacksList">
-                <!-- Заповнюється динамічно за допомогою JS -->
-            </ul>
+            <ul id="hacksList"></ul>
         </div>
 
-        <!-- Кнопка скидання -->
         <button class="btn-reset" onclick="resetToHome()">До головного меню</button>
     </div>
 </div>
 
 <script>
-    // Ініціалізація Mermaid конфігурації
     mermaid.initialize({ 
         startOnLoad: false, 
         theme: 'neutral',
@@ -274,7 +258,6 @@
         }
     });
 
-    // Опис даних, схем Mermaid та професійних порад для оператора
     const complaintData = {
         financial: {
             title: "Фінансові операції: алгоритм вирішення претензій",
@@ -355,15 +338,20 @@
         }
     };
 
-    // Функція відображення екрану з деталями
-    async function showComplaint(type) {
+    function showGrid() {
+        document.getElementById('detailScreen').style.display = 'none';
+        document.getElementById('gridScreen').style.display = 'grid';
+    }
+
+    async function renderDetail(type) {
         const data = complaintData[type];
-        
-        // Заповнення текстових полів
+        if (!data) {
+            showGrid();
+            return;
+        }
         document.getElementById('detailIcon').innerText = data.icon;
         document.getElementById('detailTitle').innerText = data.title;
-        
-        // Заповнення професійних рекомендацій
+
         const hacksContainer = document.getElementById('hacksList');
         hacksContainer.innerHTML = '';
         data.hacks.forEach(hack => {
@@ -372,30 +360,63 @@
             hacksContainer.appendChild(li);
         });
 
-        // Підготовка цільового контейнера для Mermaid
         const target = document.getElementById('mermaidTarget');
-        target.removeAttribute('data-processed'); // Очищаємо попередній статус обробки
-        target.textContent = data.graph;          // Вставляємо чистий код графа
+        target.removeAttribute('data-processed');
+        target.textContent = data.graph;
 
-        // Перемикання екранів
         document.getElementById('gridScreen').style.display = 'none';
         document.getElementById('detailScreen').style.display = 'block';
 
-        // Викликаємо сучасний рендеринг через mermaid.run()
         try {
-            await mermaid.run({
-                nodes: [target]
-            });
+            await mermaid.run({ nodes: [target] });
         } catch (error) {
             console.error("Помилка рендерингу Mermaid:", error);
         }
     }
 
-    // Функція повернення на головну сторінку (до головного меню)
-    function resetToHome() {
-        document.getElementById('detailScreen').style.display = 'none';
-        document.getElementById('gridScreen').style.display = 'grid';
+    function getTypeFromHash() {
+        const m = location.hash.match(/^#detail=([a-z0-9_-]+)/i);
+        return m ? m[1] : null;
     }
+
+    function handleNavigation() {
+        const type = getTypeFromHash();
+        if (type && complaintData[type]) {
+            renderDetail(type);
+        } else {
+            showGrid();
+        }
+    }
+
+    function showComplaint(type) {
+        if (!complaintData[type]) return;
+        history.pushState({ screen: 'detail', type }, '', '#detail=' + type);
+        renderDetail(type);
+    }
+
+    function resetToHome() {
+        if (location.hash.startsWith('#detail=')) {
+            history.back();
+        } else {
+            history.replaceState({ screen: 'grid' }, '', location.pathname + location.search);
+            showGrid();
+        }
+    }
+
+    window.addEventListener('popstate', handleNavigation);
+    window.addEventListener('hashchange', handleNavigation);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const initialType = getTypeFromHash();
+        if (initialType && complaintData[initialType]) {
+            history.replaceState({ screen: 'grid' }, '', location.pathname + location.search + '#home');
+            history.pushState({ screen: 'detail', type: initialType }, '', '#detail=' + initialType);
+            renderDetail(initialType);
+        } else {
+            history.replaceState({ screen: 'grid' }, '', location.pathname + location.search + (location.hash || ''));
+            showGrid();
+        }
+    });
 </script>
 
 </body>

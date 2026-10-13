@@ -204,8 +204,8 @@
         .btn-copy {
             background: #fff7cc;
             color: #5b4a00;
-            padding: 6px 10px;
-            font-size: 12px;
+            padding: 8px 12px;
+            font-size: 14px;
             border: 1px solid #ffe066;
         }
         .btn-copy:hover { background: #ffef99; }
@@ -292,6 +292,49 @@
 
         .links-list a { color: #0b7285; text-decoration: none; }
         .links-list a:hover { text-decoration: underline; }
+
+        /* Нові стилі для випадаючих списків шаблонів */
+        .template-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .template-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2b303a;
+        }
+        .template-select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 14px;
+            color: #1f2937;
+        }
+        .template-hint {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .template-textarea {
+            width: 100%;
+            min-height: 140px;
+            resize: vertical;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px dashed #ffe066;
+            background: #fffbea;
+            font-size: 14px;
+            color: #374151;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.45;
+        }
+        .template-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -706,6 +749,76 @@
         }
     };
 
+    // Побудова блоку з випадаючим списком шаблонів письмових відповідей
+    function buildTemplatePicker(templates) {
+        const group = document.createElement('div');
+        group.className = 'template-group';
+
+        const label = document.createElement('label');
+        label.className = 'template-label';
+        label.textContent = 'Оберіть шаблон письмової відповіді';
+
+        const select = document.createElement('select');
+        select.className = 'template-select';
+        const ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = '— Оберіть шаблон —';
+        ph.disabled = true;
+        ph.selected = true;
+        select.appendChild(ph);
+
+        templates.forEach((t, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = t.title;
+            select.appendChild(opt);
+        });
+
+        const hint = document.createElement('div');
+        hint.className = 'template-hint';
+        hint.textContent = 'Порада: підставте дані замість плейсхолдерів у квадратних дужках перед копіюванням.';
+
+        const ta = document.createElement('textarea');
+        ta.className = 'template-textarea';
+        ta.placeholder = 'Текст шаблону з’явиться тут після вибору зі списку.';
+
+        const controls = document.createElement('div');
+        controls.className = 'template-controls';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn-copy';
+        copyBtn.type = 'button';
+        copyBtn.textContent = 'Копіювати текст';
+        copyBtn.addEventListener('click', () => copyToClipboard(ta.value, copyBtn));
+
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'btn-secondary';
+        clearBtn.type = 'button';
+        clearBtn.textContent = 'Очистити';
+        clearBtn.addEventListener('click', () => {
+            ta.value = '';
+            select.value = '';
+        });
+
+        controls.appendChild(copyBtn);
+        controls.appendChild(clearBtn);
+
+        select.addEventListener('change', () => {
+            const idx = select.value;
+            if (idx !== '') {
+                ta.value = templates[idx].body;
+            }
+        });
+
+        group.appendChild(label);
+        group.appendChild(select);
+        group.appendChild(hint);
+        group.appendChild(ta);
+        group.appendChild(controls);
+
+        return group;
+    }
+
     function renderAccordion(sections) {
         const container = document.getElementById('accordionContainer');
         container.innerHTML = '';
@@ -780,31 +893,10 @@
             frag.appendChild(makeDetails('Часті питання (FAQ)', '💬', wrap));
         }
 
-        // Templates
+        // Templates as dropdown picker
         if (sections.templates?.length) {
-            const wrap = document.createElement('div');
-            sections.templates.forEach(t => {
-                const box = document.createElement('div');
-                box.className = 'template';
-                const head = document.createElement('div');
-                head.className = 'template-header';
-                const title = document.createElement('div');
-                title.className = 'template-title';
-                title.textContent = t.title;
-                const btn = document.createElement('button');
-                btn.className = 'btn-copy';
-                btn.type = 'button';
-                btn.textContent = 'Копіювати';
-                btn.addEventListener('click', () => copyToClipboard(t.body, btn));
-                head.appendChild(title);
-                head.appendChild(btn);
-                const pre = document.createElement('pre');
-                pre.textContent = t.body;
-                box.appendChild(head);
-                box.appendChild(pre);
-                wrap.appendChild(box);
-            });
-            frag.appendChild(makeDetails('Шаблони відповідей', '📋', wrap));
+            const picker = buildTemplatePicker(sections.templates);
+            frag.appendChild(makeDetails('Шаблони письмових відповідей', '📋', picker, true));
         }
 
         // Escalation
@@ -890,7 +982,6 @@
     function toggleAll(open) {
         const container = document.getElementById('accordionContainer');
         container.querySelectorAll('details.ac-item').forEach(d => d.open = !!open);
-        // також розкриємо/згорнемо вкладені FAQ для узгодженості
         container.querySelectorAll('details.faq-item').forEach(d => d.open = !!open);
     }
 
